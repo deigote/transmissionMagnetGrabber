@@ -1,0 +1,18 @@
+apply plugin: 'groovy'
+apply plugin: 'application'
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	compile 'org.codehaus.groovy:groovy-all:2.4.3'
+	compile 'javax.mail:mail:1.4.7',
+		'javax.mail:javax.mail-api:1.5.4'
+	compile 'com.squareup.retrofit:retrofit:1.9.0'
+//		'com.squareup.retrofit:retrofit-converters:2.0.0-beta1'
+
+	//compile 'com.google.code.gson:gson:2.3.1'
+}
+
+mainClassName = "com.deigote.tmg.TransmissionMagnetGrabber"
