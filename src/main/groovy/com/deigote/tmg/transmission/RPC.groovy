@@ -6,8 +6,11 @@ import retrofit.http.POST
 
 interface RPC {
 
+	public static String sessionIdHeader = "X-Transmission-Session-Id"
+
 	@POST('/')
 	Result addTorrent(
+		@Header(sessionIdHeader) String sessionId,
 		@Header("Authorization") String authorization,
 		@Body AddTorrentAction action
 	)

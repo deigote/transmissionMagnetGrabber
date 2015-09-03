@@ -4,6 +4,8 @@ import com.deigote.tmg.transmission.AddTorrentAction
 import com.deigote.tmg.transmission.RPC
 import com.deigote.tmg.transmission.Result
 import retrofit.RestAdapter
+import retrofit.RetrofitError
+import retrofit.client.Header
 
 import javax.mail.Flags
 import javax.mail.Folder
@@ -49,13 +51,30 @@ class TransmissionMagnetGrabber {
 			.collectMany { it.toString().tokenize() }
 	}
 
-	private Result transferMagnet(String magnetLink) {
+	private Result transferMagnet(String magnetLink, String sessionId = null) {
 		try {
-			transmissionClient.addTorrent(transmissionAuth, AddTorrentAction.for(magnetLink))
-		} catch (e) {
-			e.printStackTrace()
-			new Result(result: "Error: ${e.getMessage()}")
+			transmissionClient.addTorrent(transmissionAuth, sessionId ?: '', AddTorrentAction.for(magnetLink))
 		}
+		catch (RetrofitError e) {
+			if (e.response.status == '409' && !sessionId && findSessionId(e)) {
+				transferMagnet(magnetLink, findSessionId(e))
+			}
+			else {
+				treatTransferException(e)
+			}
+		}
+		catch (Throwable e) {
+			treatTransferException(e)
+		}
+	}
+
+	private String findSessionId(RetrofitError e) {
+		e.response.headers.find { it.name == RPC.sessionIdHeader }?.value
+	}
+
+	private Result treatTransferException(Throwable e) {
+		e.printStackTrace()
+		new Result(result: "Error: ${e.getMessage()}")
 	}
 
 	private static String env(String varName) {
