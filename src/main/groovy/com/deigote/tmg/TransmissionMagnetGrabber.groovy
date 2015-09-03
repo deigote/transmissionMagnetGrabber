@@ -25,7 +25,7 @@ class TransmissionMagnetGrabber {
 		.build().create(RPC)
 
 	private String gmailUser = env('GM_USER'), gmailPassword = env('GM_PWD'),
-		transmissionAuth = "${env('TRANS_USER')}:${env('TRANS_PWD')}".toString().bytes.encodeBase64()
+		transmissionAuth = 'Basic ' + "${env('TRANS_USER')}:${env('TRANS_PWD')}".toString().bytes.encodeBase64()
 
 	static void main(String[] args) {
 		TransmissionMagnetGrabber.instance.transferMagnets()
