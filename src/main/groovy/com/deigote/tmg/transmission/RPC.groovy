@@ -10,8 +10,8 @@ interface RPC {
 
 	@POST('/')
 	Result addTorrent(
-		@Header(sessionIdHeader) String sessionId,
 		@Header("Authorization") String authorization,
+		@Header(RPC.sessionIdHeader) String sessionId,
 		@Body AddTorrentAction action
 	)
 

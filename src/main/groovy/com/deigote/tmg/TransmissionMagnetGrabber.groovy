@@ -56,7 +56,7 @@ class TransmissionMagnetGrabber {
 			transmissionClient.addTorrent(transmissionAuth, sessionId ?: '', AddTorrentAction.for(magnetLink))
 		}
 		catch (RetrofitError e) {
-			if (e.response.status == '409' && !sessionId && findSessionId(e)) {
+			if (e.response.status == 409 && !sessionId && findSessionId(e)) {
 				transferMagnet(magnetLink, findSessionId(e))
 			}
 			else {
